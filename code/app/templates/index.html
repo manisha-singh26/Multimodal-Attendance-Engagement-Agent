@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal Attendance & Engagement Agent</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Chart.js for responsive visual analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Top Navigation -->
+        <header class="navbar">
+            <div class="nav-brand">
+                <div class="logo-icon">🎓</div>
+                <div class="brand-text">
+                    <h1>Classroom Intelligence Agent</h1>
+                    <span class="subtitle">Multimodal Attendance, Dynamics & Pedagogical Co-Pilot</span>
+                </div>
+            </div>
+            
+            <div class="nav-status">
+                <span class="badge privacy-badge">🔒 100% Local / Offline Edge</span>
+                <label class="toggle-container" title="Mask student names and identifiers in UI and exports">
+                    <input type="checkbox" id="anonToggle">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Privacy Anonymizer</span>
+                </label>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Controls Bar -->
+            <section class="control-panel">
+                <div class="session-selector-group">
+                    <label for="sessionSelect">Select Session:</label>
+                    <select id="sessionSelect">
+                        <option value="">-- Active Live Session --</option>
+                    </select>
+                </div>
+
+                <div class="btn-group">
+                    <button id="btnRunFull" class="btn btn-primary">▶ Run Full Session Demo</button>
+                    <button id="btnStartLive" class="btn btn-secondary">⚡ Start Live Stream</button>
+                    <button id="btnStep" class="btn btn-outline" disabled>⏭ Next Step (5s)</button>
+                    <button id="btnPauseLive" class="btn btn-outline" style="display:none;">⏸ Pause</button>
+                    <button id="btnExportCsv" class="btn btn-export">📥 Export CSV</button>
+                    <button id="btnExportJson" class="btn btn-export">📄 Export JSON</button>
+                </div>
+            </section>
+
+            <!-- Metrics Highlight Cards -->
+            <section class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Attendance Rate</span>
+                        <span class="stat-icon">👥</span>
+                    </div>
+                    <div class="stat-value" id="statAttendanceRate">--%</div>
+                    <div class="stat-sub" id="statAttendanceSub">Present: -- | Tardy: -- | Absent: --</div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Composite Engagement</span>
+                        <span class="stat-icon">📈</span>
+                    </div>
+                    <div class="stat-value" id="statEngagementScore">--%</div>
+                    <div class="stat-sub" id="statEngagementSub">Visual: --% | Audio: --%</div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Classroom Dynamic State</span>
+                        <span class="stat-icon">🏷️</span>
+                    </div>
+                    <div class="stat-value state-pill" id="statStateTag">INITIALIZING</div>
+                    <div class="stat-sub" id="statActiveParticipants">Tracking -- active participants</div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Session Pacing & Audio</span>
+                        <span class="stat-icon">🎙️</span>
+                    </div>
+                    <div class="stat-value" id="statAudioState">--</div>
+                    <div class="stat-sub" id="statAcousticSub">RMS: -- | Silence: 0s</div>
+                </div>
+            </section>
+
+            <!-- Middle Row: Analytics Chart & AI Agent Suggestions -->
+            <div class="analytics-row">
+                <!-- Multimodal Fusion Chart -->
+                <section class="card chart-card">
+                    <div class="card-header">
+                        <h2>Multimodal Engagement Timeline</h2>
+                        <span class="card-caption">Visual Attention (65%) + Audio Dynamics (35%) Fusion</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="engagementChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- AI Pedagogical Suggestions Feed -->
+                <section class="card suggestions-card">
+                    <div class="card-header">
+                        <h2>💡 AI Teaching Suggestions</h2>
+                        <span class="badge ai-badge">Agent Active</span>
+                    </div>
+                    <p class="suggestions-desc">Context-aware pedagogical prompts triggered by session dynamics.</p>
+                    <div class="suggestions-list" id="suggestionsList">
+                        <div class="empty-state">No pedagogical alerts yet. System is monitoring session dynamics...</div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Participant Grid & Attendance Records -->
+            <div class="details-row">
+                <!-- Live Participant Attention Cards -->
+                <section class="card participant-card">
+                    <div class="card-header">
+                        <h2>Student Behavioral Attention Grid</h2>
+                        <span class="card-caption">Head Pose, Gaze, Motion & Inactivity Tracking</span>
+                    </div>
+                    <div class="student-grid" id="studentGrid">
+                        <!-- Populated dynamically -->
+                    </div>
+                </section>
+
+                <!-- Continuous Attendance Roster Log -->
+                <section class="card attendance-card">
+                    <div class="card-header">
+                        <h2>Automated Attendance Verification Log</h2>
+                        <span class="card-caption">Continuous Presence Threshold Logic</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="attendanceTable">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Status</th>
+                                    <th>Presence Ratio</th>
+                                    <th>Total Time</th>
+                                    <th>First Seen</th>
+                                    <th>Diagnostic Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" class="text-center">Start a session to populate attendance.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
+
