@@ -1,0 +1,13 @@
+services:
+  classroom-agent:
+    build: .
+    container_name: multimodal_classroom_agent
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - THREADS=6
+    volumes:
+      - ./db:/app/db
+
